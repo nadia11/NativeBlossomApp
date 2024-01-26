@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Appbar, TextInput as PaperTextInput, Button as PaperButton, IconButton } from 'react-native-paper';
+import { Appbar, TextInput as PaperTextInput, Button as PaperButton, IconButton, Checkbox as PaperCheckbox, Snackbar} from 'react-native-paper';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-
+const [agreeToTerms, setAgreeToTerms] = useState(false);
+const [agreeToTermsError, setAgreeToTermsError] = useState('');
+const [isToastVisible, setToastVisible] = useState(false);
+const toggleToast = () => {
+  setToastVisible(!isToastVisible);
+   // navigation.navigate('Login');
+};
   const validateUsername = () => {
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
-
+  
  if (!username) {
     setUsernameError('Please enter your username');
-  } else if (!emailRegex.test(username)) {
-    setUsernameError('Invalid email address');
-  } else {
+  }  else {
     setUsernameError('');
   }
   };
@@ -35,7 +38,20 @@ const RegisterScreen = ({ navigation }) => {
       setPasswordError('');
     }
   };
+const validateEmail = () => {
+          const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
 
+ if (!email) {
+    setEmailError('Please enter your Email');
+  }
+  else if (!emailRegex.test(email)) {
+    setEmailError('Invalid email address');
+  }
+  else {
+    setEmailError('');
+  }
+
+};
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -43,18 +59,26 @@ const RegisterScreen = ({ navigation }) => {
   const handleRegister = () => {
     validateUsername();
     validatePassword();
+    validateEmail();
+  if (!agreeToTerms) {
+    setAgreeToTermsError('Please agree to the terms and services');
+    return;
+  } else {
+    setAgreeToTermsError('');
+  }
 
-    if (!usernameError && !passwordError) {
+    if (!usernameError && !passwordError && !agreeToTermsError && !emailError) {
       // Implement your registration logic here
-      console.log('Register button clicked');
+      //console.log('Register succesful! Tap to continue');
+        toggleToast();
     }
   };
 
   return (
     <View>
-      <Appbar.Header>
+      {/* <Appbar.Header>
         <Appbar.Content title="Register" />
-      </Appbar.Header>
+      </Appbar.Header> */}
       <View>
         <PaperTextInput
           label="Username"
@@ -88,8 +112,19 @@ const RegisterScreen = ({ navigation }) => {
           style={styles.input}
           value={email}
           onChangeText={(text) => setEmail(text)}
+           onBlur={validateEmail}
         />
-
+        {emailError ? (
+  <Text style={styles.errorText}>{emailError}</Text>
+) : null}
+<PaperCheckbox.Item
+  label="I agree to the terms and services"
+  status={agreeToTerms ? 'checked' : 'unchecked'}
+  onPress={() => setAgreeToTerms(!agreeToTerms)}
+/>
+{agreeToTermsError ? (
+  <Text style={styles.errorText}>{agreeToTermsError}</Text>
+) : null}
         <PaperButton
           mode="contained"
           style={styles.button}
@@ -97,6 +132,20 @@ const RegisterScreen = ({ navigation }) => {
         >
           Register
         </PaperButton>
+        <Snackbar
+  visible={isToastVisible}
+  onDismiss={toggleToast}
+  duration={3000} // Adjust the duration as needed
+  action={{
+    label: 'OK',
+       onPress: () => {
+      navigation.navigate('Login'); // Navigate to the login page when the toast is pressed
+    },
+
+  }}
+>
+  Registration successful!
+</Snackbar>
       </View>
     </View>
   );
