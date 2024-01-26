@@ -1,34 +1,42 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Appbar, TextInput as PaperTextInput, Button as PaperButton, IconButton } from 'react-native-paper';
-
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import {
+  Appbar,
+  TextInput as PaperTextInput,
+  Button as PaperButton,
+  IconButton,
+  ActivityIndicator,
+} from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [usernameError, setUsernameError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  const validateUsername = () => {
+  const [loading, setLoading] = useState(false);
+  const validateEmail = () => {
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
-  if (!username) {
-    setUsernameError('Please enter your username');
-  } else if (!emailRegex.test(username)) {
-    setUsernameError('Invalid email address');
-  } else {
-    setUsernameError('');
-  }
+    if (!email) {
+      setEmailError("Please enter your email");
+    } else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError("");
+    }
   };
 
   const validatePassword = () => {
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,10}$/;
-  if (!password) {
-      setPasswordError('Please enter your password');
-  }
-    else if (!passwordRegex.test(password)) {
-      setPasswordError('Password must be 6-10 characters with at least one number and one special character');
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,10}$/;
+    if (!password) {
+      setPasswordError("Please enter your password");
+    } else if (!passwordRegex.test(password)) {
+      setPasswordError(
+        "Password must be 6-10 characters with at least one number and one special character"
+      );
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   };
 
@@ -36,13 +44,25 @@ const LoginScreen = ({ navigation }) => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleLogin = () => {
-    validateUsername();
+  const handleLogin = async () => {
+    validateEmail();
     validatePassword();
 
-    if (!usernameError && !passwordError) {
-      // Implement your login logic here
-      console.log('Login button clicked');
+    if (!emailError && !passwordError) {
+      try {
+        // await AsyncStorage.setItem("username", username);
+        await AsyncStorage.setItem("email", email);
+        setLoading(true);
+
+        // Simulate a delay of 2 seconds (2000 milliseconds)
+        setTimeout(() => {
+          setLoading(false); // Hide the Activity Indicator after 2 seconds
+          navigation.navigate("Home");
+        }, 2000);
+        //toggleToast();
+      } catch (error) {
+        console.error("Error saving data in AsyncStorage:", error);
+      }
     }
   };
 
@@ -53,13 +73,13 @@ const LoginScreen = ({ navigation }) => {
       </Appbar.Header> */}
       <View>
         <PaperTextInput
-          label="Username"
+          label="Email"
           style={styles.input}
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          onBlur={validateUsername}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          onBlur={validateEmail}
         />
-        {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
         <PaperTextInput
           label="Password"
@@ -70,14 +90,16 @@ const LoginScreen = ({ navigation }) => {
           onBlur={validatePassword}
           right={
             <PaperTextInput.Icon
-              name={passwordVisible ? 'eye-off' : 'eye'}
-              icon="eye"   
+              name={passwordVisible ? "eye-off" : "eye"}
+              icon="eye"
               onPress={togglePasswordVisibility}
-               style={styles.iconStyle} 
+              style={styles.iconStyle}
             />
           }
         />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
         <PaperButton
           mode="contained"
           style={styles.button}
@@ -85,6 +107,13 @@ const LoginScreen = ({ navigation }) => {
         >
           Login
         </PaperButton>
+        {loading && (
+          <ActivityIndicator
+            animating={true}
+            size="default"
+            style={styles.activityIndicator}
+          />
+        )}
       </View>
     </View>
   );
@@ -95,18 +124,21 @@ const styles = StyleSheet.create({
     height: 60,
     margin: 12,
   },
+  activityIndicator: {
+    marginTop: 20,
+  },
   button: {
-    width: '50%',
-    alignSelf: 'center',
+    width: "50%",
+    alignSelf: "center",
     marginTop: 20,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginLeft: 16,
     marginTop: 4,
   },
-   iconStyle: {
-    color: 'blue', // Add your desired color here
+  iconStyle: {
+    color: "blue", // Add your desired color here
     fontSize: 24, // Add your desired font size here
   },
 });

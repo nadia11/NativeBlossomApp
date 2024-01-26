@@ -38,24 +38,20 @@ const HomeScreen = () => {
   );
 
   return (
-    <ImageBackground
-      source={{
-        uri: "https://hips.hearstapps.com/hmg-prod/images/online-buying-and-delivery-concept-royalty-free-image-1675370119.jpg?crop=0.563xw:1.00xh;0.216xw,0&resize=640:*",
-      }}
-      style={styles.backgroundImage}
-    >
-      <View style={styles.overlay}>
-        {/* <Appbar.Header>
-          <Appbar.Content title="Home" />
-        </Appbar.Header> */}
-        <View style={styles.content}>
-          <View>
-            <Text>Welcome, {username}!</Text>
-            <Text>Email: {email}</Text>
-          </View>
+    <View style={styles.overlay}>
+      <Appbar.Header style={styles.customHeaderStyle} statusBarHeight={0}>
+        <Appbar.BackAction onPress={() => {}} />
+        <Appbar.Content title="Title" />
+        <Appbar.Action icon="calendar" onPress={() => {}} />
+        <Appbar.Action icon="magnify" onPress={() => {}} />
+      </Appbar.Header>
+      <View style={styles.content}>
+        <View>
+          <Text>Welcome, {username}!</Text>
+          <Text>Email: {email}</Text>
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -73,6 +69,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  customHeaderStyle: {
+    // Change the background color to your desired color
+    elevation: 5,
   },
 });
 
