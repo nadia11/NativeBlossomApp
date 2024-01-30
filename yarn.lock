@@ -5389,6 +5389,11 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   "version" "18.2.0"
 
+"react-native-expo-viewport-units@^0.0.8":
+  "integrity" "sha512-duAEaoVF41puhXhpI1BuDFc2AMBqfWT2S74EJqaQ5dnuZVhsP++AExJwVo7/2/lHmb6+gYWGyBZOxxPCMWe+Ew=="
+  "resolved" "https://registry.npmjs.org/react-native-expo-viewport-units/-/react-native-expo-viewport-units-0.0.8.tgz"
+  "version" "0.0.8"
+
 "react-native-gesture-handler@>= 1.0.0", "react-native-gesture-handler@~2.14.0":
   "integrity" "sha512-YiM1BApV4aKeuwsM6O4C2ufwewYEKk6VMXOt0YqEZFMwABBFWhXLySFZYjBSNRU2USGppJbfHP1q1DfFQpKhdA=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.14.1.tgz"

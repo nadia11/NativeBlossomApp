@@ -9,6 +9,7 @@ import {
   Snackbar,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {vw} from "react-native-expo-viewport-units";
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -85,7 +86,7 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {/* <Appbar.Header>
         <Appbar.Content title="Register" />
       </Appbar.Header> */}
@@ -163,9 +164,16 @@ const RegisterScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1, // This makes the container fill the entire screen
+    justifyContent: 'center', // This centers children vertically in the container
+    alignItems: 'center', // This centers children horizontally in the container
+  },
   input: {
+    backgroundColor:'#c5e1a5',
     height: 60,
     margin: 12,
+    width: vw(80),
   },
   button: {
     width: "50%",

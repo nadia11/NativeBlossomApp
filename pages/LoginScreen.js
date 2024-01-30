@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import {
   Appbar,
   TextInput as PaperTextInput,
@@ -8,6 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import defaultTheme from "@react-navigation/native/src/theming/DefaultTheme";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +69,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {/* <Appbar.Header>
         <Appbar.Content title="Login" />
       </Appbar.Header> */}
@@ -120,9 +122,16 @@ const LoginScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1, // This makes the container fill the entire screen
+    justifyContent: 'center', // This centers children vertically in the container
+    alignItems: 'center', // This centers children horizontally in the container
+  },
   input: {
+    backgroundColor:'#c5e1a5',
     height: 60,
     margin: 12,
+    width: vw(80),
   },
   activityIndicator: {
     marginTop: 20,
